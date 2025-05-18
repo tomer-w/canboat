@@ -1084,7 +1084,7 @@ extern bool fieldPrintTime(const Field   *field,
   uint32_t hours;
   uint32_t minutes;
   uint32_t seconds;
-  uint32_t units;
+  uint32_t fraction;
   int64_t  value;
   int64_t  maxValue;
   uint64_t t;
@@ -1120,13 +1120,13 @@ extern bool fieldPrintTime(const Field   *field,
     value *= (int64_t) field->resolution;
   }
 
-  t       = (uint64_t) value;
-  seconds = t / unitspersecond;
-  units   = t % unitspersecond;
-  minutes = seconds / 60;
-  seconds = seconds % 60;
-  hours   = minutes / 60;
-  minutes = minutes % 60;
+  t        = (uint64_t) value;
+  seconds  = t / unitspersecond;
+  fraction = t % unitspersecond;
+  minutes  = seconds / 60;
+  seconds  = seconds % 60;
+  hours    = minutes / 60;
+  minutes  = minutes % 60;
 
   digits = log10(unitspersecond);
 
@@ -1136,9 +1136,9 @@ extern bool fieldPrintTime(const Field   *field,
     {
       mprintf("%s%" PRId64 ",\"name\":", sign, value);
     }
-    if (units != 0)
+    if (fraction != 0)
     {
-      mprintf("\"%s%02u:%02u:%02u.%0*u\"", sign, hours, minutes, seconds, digits, units);
+      mprintf("\"%s%02u:%02u:%02u.%0*u\"", sign, hours, minutes, seconds, digits, fraction);
     }
     else
     {
@@ -1151,9 +1151,9 @@ extern bool fieldPrintTime(const Field   *field,
   }
   else
   {
-    if (units)
+    if (fraction)
     {
-      mprintf("%s%02u:%02u:%02u.%0*u", sign, hours, minutes, seconds, digits, units);
+      mprintf("%s%02u:%02u:%02u.%0*u", sign, hours, minutes, seconds, digits, fraction);
     }
     else
     {
@@ -1361,7 +1361,7 @@ extern bool fieldPrintStringLZ(const Field   *field,
                                size_t         startBit,
                                size_t        *bits)
 {
-  // STRINGLZ format is <len> [ <data> ... ]
+  // STRINGLZ format is <len> [ <data> ... ] <zero>
   size_t len;
 
   if (!adjustDataLenStart(&data, &dataLen, &startBit))
@@ -1372,7 +1372,7 @@ extern bool fieldPrintStringLZ(const Field   *field,
   // Cap to dataLen
   len   = *data++;
   len   = CB_MIN(len, dataLen - 1);
-  *bits = BYTES(len + 1);
+  *bits = BYTES(len + 2);
 
   return printString(fieldName, data, len);
 }
