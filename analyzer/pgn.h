@@ -2235,84 +2235,92 @@ Pgn pgnList[] = {
       END_OF_FIELDS}}
 
     ,
-    {"Fusion: Media Control",
-     126720,
-     PACKET_INCOMPLETE,
-     PACKET_FAST,
-     {COMPANY(419),
-      MATCH_PRIMARY_KEY_FIELD("Proprietary ID", BYTES(1), 3, "Media Control"),
-      UINT8_FIELD("Unknown"),
-      UINT8_FIELD("Source ID"),
-      LOOKUP_FIELD("Command", BYTES(1), FUSION_COMMAND),
-      END_OF_FIELDS}}
-
-    ,
-    {"Fusion: Sirius Control",
-     126720,
-     PACKET_INCOMPLETE,
-     PACKET_FAST,
-     {COMPANY(419),
-      MATCH_PRIMARY_KEY_FIELD("Proprietary ID", BYTES(1), 30, "Sirius Control"),
-      UINT8_FIELD("Unknown"),
-      UINT8_FIELD("Source ID"),
-      LOOKUP_FIELD("Command", BYTES(1), FUSION_SIRIUS_COMMAND),
-      END_OF_FIELDS}}
-
-    ,
+    /* Fusion codes based on the Garmin Fusion Android App */
     {"Fusion: Request Status",
-     126720,
-     PACKET_INCOMPLETE,
-     PACKET_FAST,
-     {COMPANY(419), MATCH_LOOKUP_FIELD("Proprietary ID", BYTES(1), 1, FUSION_MESSAGE_ID), UINT8_FIELD("Unknown"), END_OF_FIELDS}}
+      126720,
+      PACKET_COMPLETE,
+      PACKET_FAST,
+      {COMPANY(419),
+        MATCH_LOOKUP_PRIMARY_KEY_FIELD("Proprietary ID", BYTES(2), 1, FUSION_COMMAND_MESSAGE_ID),
+       END_OF_FIELDS}}
+ 
+     ,
 
-    ,
     {"Fusion: Set Source",
      126720,
-     PACKET_INCOMPLETE,
+     PACKET_COMPLETE,
      PACKET_FAST,
      {COMPANY(419),
-      MATCH_LOOKUP_FIELD("Proprietary ID", BYTES(1), 2, FUSION_MESSAGE_ID),
-      UINT8_FIELD("Unknown"),
+      MATCH_LOOKUP_PRIMARY_KEY_FIELD("Proprietary ID", BYTES(2), 2, FUSION_COMMAND_MESSAGE_ID),
       UINT8_FIELD("Source ID"),
+      END_OF_FIELDS}}
+ 
+    ,
+    {"Fusion: Media Control",
+     126720,
+     PACKET_COMPLETE,
+     PACKET_FAST,
+     {COMPANY(419),
+      MATCH_LOOKUP_PRIMARY_KEY_FIELD("Proprietary ID", BYTES(2), 3, FUSION_COMMAND_MESSAGE_ID),
+      UINT8_PRIMARY_KEY_FIELD("Source ID"),
+      LOOKUP_FIELD("Command", BYTES(1), FUSION_COMMAND),
       END_OF_FIELDS}}
 
     ,
     {"Fusion: Set Mute",
      126720,
-     PACKET_INCOMPLETE,
+     PACKET_COMPLETE,
      PACKET_FAST,
      {COMPANY(419),
-      MATCH_LOOKUP_FIELD("Proprietary ID", BYTES(1), 23, FUSION_MESSAGE_ID),
+      MATCH_LOOKUP_PRIMARY_KEY_FIELD("Proprietary ID", BYTES(2), 23, FUSION_COMMAND_MESSAGE_ID),
       LOOKUP_FIELD("Command", BYTES(1), FUSION_MUTE_COMMAND),
       END_OF_FIELDS}}
 
     ,
     {"Fusion: Set Zone Volume",
      126720,
-     PACKET_INCOMPLETE,
+     PACKET_COMPLETE,
      PACKET_FAST,
      {COMPANY(419),
-      MATCH_LOOKUP_FIELD("Proprietary ID", BYTES(1), 24, FUSION_MESSAGE_ID),
-      UINT8_FIELD("Unknown"),
-      UINT8_FIELD("Zone"),
+      MATCH_LOOKUP_PRIMARY_KEY_FIELD("Proprietary ID", BYTES(2), 24, FUSION_COMMAND_MESSAGE_ID),
       UINT8_FIELD("Volume"),
       END_OF_FIELDS}}
 
     ,
     {"Fusion: Set All Volumes",
      126720,
-     PACKET_INCOMPLETE,
+     PACKET_COMPLETE,
      PACKET_FAST,
      {COMPANY(419),
-      MATCH_LOOKUP_FIELD("Proprietary ID", BYTES(1), 25, FUSION_MESSAGE_ID),
-      UINT8_FIELD("Unknown"),
+      MATCH_LOOKUP_PRIMARY_KEY_FIELD("Proprietary ID", BYTES(2), 25, FUSION_COMMAND_MESSAGE_ID),
       UINT8_FIELD("Zone1"),
       UINT8_FIELD("Zone2"),
       UINT8_FIELD("Zone3"),
       UINT8_FIELD("Zone4"),
       END_OF_FIELDS}}
 
-    /* Seatalk1 code from http://thomasknauf.de/rap/seatalk2.htm */
+    ,
+    {"Fusion: Set Power State",
+      126720,
+      PACKET_COMPLETE,
+      PACKET_FAST,
+      {COMPANY(419),
+      MATCH_LOOKUP_PRIMARY_KEY_FIELD("Proprietary ID", BYTES(2), 28, FUSION_COMMAND_MESSAGE_ID),
+      LOOKUP_FIELD("State", BYTES(1), FUSION_POWER_STATE),
+      END_OF_FIELDS}}
+    ,
+    {"Fusion: Sirius Control",
+     126720,
+     PACKET_COMPLETE,
+     PACKET_FAST,
+     {COMPANY(419),
+      MATCH_LOOKUP_PRIMARY_KEY_FIELD("Proprietary ID", BYTES(2), 30, FUSION_COMMAND_MESSAGE_ID),
+      UINT8_PRIMARY_KEY_FIELD("Source ID"),
+      LOOKUP_PRIMARY_KEY_FIELD("Command", BYTES(1), FUSION_SIRIUS_COMMAND),
+       UINT16_FIELD("Parameter"),
+       END_OF_FIELDS}}
+  
+       /* Seatalk1 code from http://thomasknauf.de/rap/seatalk2.htm */
     ,
     {"Seatalk1: Keystroke",
      126720,
